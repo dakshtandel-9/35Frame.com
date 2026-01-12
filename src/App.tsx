@@ -1,0 +1,53 @@
+import { Suspense, lazy } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ScrollToTop from "@/components/ScrollToTop";
+import PageLoader from "@/components/PageLoader";
+
+// Lazy load all pages
+const Index = lazy(() => import("./pages/Index"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const WeddingPhotography = lazy(() => import("./pages/WeddingPhotography"));
+const PreWeddingPhotography = lazy(() => import("./pages/PreWeddingPhotography"));
+const WeddingFilms = lazy(() => import("./pages/WeddingFilms"));
+const EngagementPhotography = lazy(() => import("./pages/EngagementPhotography"));
+const Portfolio = lazy(() => import("./pages/Portfolio"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <ScrollToTop />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route
+              path="/services/wedding-photography"
+              element={<WeddingPhotography />}
+            />
+            <Route path="/services/pre-wedding" element={<PreWeddingPhotography />} />
+            <Route path="/services/wedding-films" element={<WeddingFilms />} />
+            <Route path="/services/engagement" element={<EngagementPhotography />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;
+
