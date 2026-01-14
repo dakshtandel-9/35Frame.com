@@ -1,13 +1,40 @@
 import ServicePageLayout from "@/components/ServicePageLayout";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import heroImage from "@/assets/service-engagement.jpg";
-import img1 from "@/assets/0051.jpg";
-import img2 from "@/assets/0052.jpg";
-import img3 from "@/assets/0053.jpg";
-import img4 from "@/assets/0054.jpg";
-import img5 from "@/assets/0055.jpg";
-import img6 from "@/assets/0056.jpg";
 
 const EngagementPhotography = () => {
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEngagementImages = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("portfolio_images")
+          .select("image_url")
+          .eq("category", "Engagement")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error fetching engagement images:", error);
+          setGalleryImages([]);
+        } else if (data) {
+          const supabaseImages = data.map((img) => img.image_url);
+          setGalleryImages(supabaseImages);
+        }
+      } catch (err) {
+        console.error("Failed to fetch engagement images:", err);
+        setGalleryImages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEngagementImages();
+  }, []);
+
   const coverageItems = [
     "Haldi Ceremony Coverage",
     "Mehendi Photography",
@@ -20,7 +47,16 @@ const EngagementPhotography = () => {
     "Quick Turnaround",
   ];
 
-  const galleryImages = [img1, img2, img3, img4, img5, img6];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading images...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ServicePageLayout

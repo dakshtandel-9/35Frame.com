@@ -50,7 +50,7 @@ const Contact = () => {
             Contact Us
           </h1>
           <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ready to book your date? Let's meet over a coffee and bring your 
+            Ready to book your date? Let's meet over a coffee and bring your
             imagination to life. We'd love to hear about your special day.
           </p>
         </div>
@@ -66,9 +66,9 @@ const Contact = () => {
                 Let's Create
                 <span className="block italic">Magic Together</span>
               </h2>
-              
+
               <p className="font-body text-lg text-muted-foreground mb-12 max-w-md">
-                Whether you're planning an intimate ceremony or a grand celebration, 
+                Whether you're planning an intimate ceremony or a grand celebration,
                 we're here to capture every precious moment.
               </p>
 
@@ -82,7 +82,7 @@ const Contact = () => {
                     <p className="font-display text-lg text-foreground">+91 98765 43210</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 border border-primary/30 flex items-center justify-center">
                     <Mail className="w-5 h-5 text-primary" />
@@ -92,7 +92,7 @@ const Contact = () => {
                     <p className="font-display text-lg text-foreground">hello@35framesphotography.com</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 border border-primary/30 flex items-center justify-center">
                     <MapPin className="w-5 h-5 text-primary" />
@@ -141,7 +141,7 @@ const Contact = () => {
               <h3 className="font-display text-2xl text-foreground mb-8">
                 Request Availability
               </h3>
-              
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div>
@@ -167,7 +167,7 @@ const Contact = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div>
                     <Input
@@ -206,7 +206,7 @@ const Contact = () => {
                     <option value="other">Other</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <Textarea
                     name="message"
@@ -217,7 +217,7 @@ const Contact = () => {
                     className="bg-background border-border text-foreground placeholder:text-muted-foreground font-body resize-none"
                   />
                 </div>
-                
+
                 <Button type="submit" variant="gold" size="lg" className="w-full">
                   Send Message
                 </Button>
@@ -227,45 +227,6 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-16 lg:py-24 bg-card">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="text-center mb-12">
-            <h2 className="font-display text-3xl lg:text-4xl text-foreground">
-              Frequently Asked Questions
-            </h2>
-          </div>
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="border border-border p-6">
-              <h3 className="font-display text-lg text-foreground mb-2">
-                How far in advance should we book?
-              </h3>
-              <p className="font-body text-muted-foreground">
-                We recommend booking 6-12 months in advance for wedding dates, especially during 
-                peak season. For pre-wedding and engagement shoots, 2-3 months notice is usually sufficient.
-              </p>
-            </div>
-            <div className="border border-border p-6">
-              <h3 className="font-display text-lg text-foreground mb-2">
-                Do you travel for destination weddings?
-              </h3>
-              <p className="font-body text-muted-foreground">
-                Absolutely! We love capturing destination weddings across India and internationally. 
-                Travel costs are discussed separately based on location.
-              </p>
-            </div>
-            <div className="border border-border p-6">
-              <h3 className="font-display text-lg text-foreground mb-2">
-                How long until we receive our photos?
-              </h3>
-              <p className="font-body text-muted-foreground">
-                Wedding photo delivery typically takes 4-6 weeks. Pre-wedding and engagement 
-                shoots are delivered within 2-3 weeks of the session.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

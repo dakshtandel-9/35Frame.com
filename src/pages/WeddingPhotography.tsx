@@ -1,14 +1,40 @@
 import ServicePageLayout from "@/components/ServicePageLayout";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import heroImage from "@/assets/wedding-hero.jpg";
-import img1 from "@/assets/wedding-01.jpg";
-import img2 from "@/assets/wedding-02.jpg";
-import img3 from "@/assets/wedding-03.jpg";
-import img4 from "@/assets/wedding-04.jpg";
-import img5 from "@/assets/wedding-05.jpg";
-import img6 from "@/assets/wedding-06.jpg";
-import img7 from "@/assets/wedding-07.jpg";
 
 const WeddingPhotography = () => {
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWeddingImages = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("portfolio_images")
+          .select("image_url")
+          .eq("category", "Wedding")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error fetching wedding images:", error);
+          setGalleryImages([]);
+        } else if (data) {
+          const supabaseImages = data.map((img) => img.image_url);
+          setGalleryImages(supabaseImages);
+        }
+      } catch (err) {
+        console.error("Failed to fetch wedding images:", err);
+        setGalleryImages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWeddingImages();
+  }, []);
+
   const coverageItems = [
     "Full Day Coverage",
     "Candid Photography",
@@ -21,7 +47,16 @@ const WeddingPhotography = () => {
     "Multiple Photographers",
   ];
 
-  const galleryImages = [img1, img2, img3, img4, img5, img6, img7];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading images...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ServicePageLayout

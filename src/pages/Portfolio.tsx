@@ -1,53 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Lightbox from "@/components/Lightbox";
+import { supabase } from "@/lib/supabaseClient";
+import { Loader2 } from "lucide-react";
 
-import portfolio1 from "@/assets/portfolio-01.jpg";
-import portfolio2 from "@/assets/portfolio-02.jpg";
-import portfolio3 from "@/assets/portfolio-03.jpg";
-import portfolio4 from "@/assets/portfolio-04.jpg";
-import portfolio5 from "@/assets/portfolio-05.jpg";
-import portfolio6 from "@/assets/portfolio-06.jpg";
-import portfolio7 from "@/assets/portfolio-07.jpg";
-import portfolio8 from "@/assets/portfolio-08.jpg";
-import portfolio9 from "@/assets/portfolio-09.jpg";
-import wedding1 from "@/assets/wedding-01.jpg";
-import wedding2 from "@/assets/wedding-02.jpg";
-import wedding3 from "@/assets/wedding-03.jpg";
-import prewedding1 from "@/assets/prewedding-01.jpg";
-import prewedding2 from "@/assets/prewedding-02.jpg";
-import prewedding3 from "@/assets/prewedding-03.jpg";
+interface PortfolioImage {
+  id: string;
+  src: string;
+  category: string;
+  title?: string | null;
+}
 
-const allImages = [
-  { src: portfolio1, category: "All" },
-  { src: portfolio2, category: "Pre-Wedding" },
-  { src: wedding1, category: "Wedding" },
-  { src: portfolio3, category: "Engagement" },
-  { src: prewedding1, category: "Pre-Wedding" },
-  { src: portfolio4, category: "Wedding" },
-  { src: wedding2, category: "Wedding" },
-  { src: portfolio5, category: "Wedding" },
-  { src: prewedding2, category: "Pre-Wedding" },
-  { src: portfolio6, category: "Wedding" },
-  { src: portfolio7, category: "Engagement" },
-  { src: wedding3, category: "Wedding" },
-  { src: portfolio8, category: "Pre-Wedding" },
-  { src: prewedding3, category: "Pre-Wedding" },
-  { src: portfolio9, category: "Wedding" },
-];
-
-const categories = ["All", "Wedding", "Pre-Wedding", "Engagement"];
+const categories = ["All", "Wedding", "Pre-Wedding", "Engagement", "Candid", "Birthday", "Couple Portraits", "Naming Ceremony"];
 
 const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [images, setImages] = useState<PortfolioImage[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredImages = activeCategory === "All" 
-    ? allImages 
-    : allImages.filter(img => img.category === activeCategory);
+  // Fetch images from Supabase
+  useEffect(() => {
+    const fetchImages = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("portfolio_images")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error fetching images:", error);
+          setImages([]);
+        } else if (data) {
+          // Convert Supabase data to our format
+          const supabaseImages: PortfolioImage[] = data.map((img) => ({
+            id: img.id,
+            src: img.image_url,
+            category: img.category,
+            title: img.title,
+          }));
+          setImages(supabaseImages);
+        }
+      } catch (err) {
+        console.error("Failed to fetch images:", err);
+        setImages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  const filteredImages = activeCategory === "All"
+    ? images
+    : images.filter(img => img.category === activeCategory);
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -68,7 +79,7 @@ const Portfolio = () => {
             Portfolio
           </h1>
           <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">
-            A curated collection of our finest work, capturing timeless moments 
+            A curated collection of our finest work, capturing timeless moments
             and authentic emotions across weddings, pre-weddings, and engagements.
           </p>
         </div>
@@ -82,11 +93,10 @@ const Portfolio = () => {
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`font-body text-sm tracking-luxury uppercase px-6 py-2 transition-colors duration-300 ${
-                  activeCategory === category
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-primary"
-                }`}
+                className={`font-body text-sm tracking-luxury uppercase px-6 py-2 transition-colors duration-300 ${activeCategory === category
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-primary"
+                  }`}
               >
                 {category}
               </button>
@@ -98,27 +108,39 @@ const Portfolio = () => {
       {/* Portfolio Grid */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredImages.map((item, index) => (
-              <div
-                key={index}
-                className="group relative image-hover aspect-[3/2] cursor-pointer"
-                onClick={() => openLightbox(index)}
-              >
-                <img
-                  src={item.src}
-                  alt={`${item.category} Photography`}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                  <p className="font-body text-sm tracking-luxury uppercase text-primary">
-                    {item.category}
-                  </p>
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : filteredImages.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="font-body text-muted-foreground text-lg">
+                No images found. Upload images from the admin dashboard.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredImages.map((item, index) => (
+                <div
+                  key={item.id}
+                  className="group relative image-hover aspect-[3/2] cursor-pointer"
+                  onClick={() => openLightbox(index)}
+                >
+                  <img
+                    src={item.src}
+                    alt={item.title || `${item.category} Photography`}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                    <p className="font-body text-sm tracking-luxury uppercase text-primary">
+                      {item.category}
+                    </p>
+                  </div>
+                  <div className="absolute inset-4 border border-primary/0 group-hover:border-primary/40 transition-all duration-500" />
                 </div>
-                <div className="absolute inset-4 border border-primary/0 group-hover:border-primary/40 transition-all duration-500" />
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

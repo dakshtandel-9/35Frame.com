@@ -9,6 +9,10 @@ const serviceLinks = [
   { label: "Pre-Wedding Photography", href: "/services/pre-wedding" },
   { label: "Wedding Films", href: "/services/wedding-films" },
   { label: "Engagement Photography", href: "/services/engagement" },
+  { label: "Candid Photography", href: "/services/candid-photography" },
+  { label: "Birthday Photography", href: "/services/birthday-photography" },
+  { label: "Couple Portraits", href: "/services/couple-portraits" },
+  { label: "Naming Ceremony", href: "/services/naming-ceremony" },
 ];
 
 const Header = () => {
@@ -63,19 +67,18 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? "bg-background border-b border-border/50"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+        ? "bg-background border-b border-border/50"
+        : "bg-transparent"
+        }`}
     >
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link to="/" className="flex items-center" onClick={handleHomeClick}>
-            <img 
-              src={logo} 
-              alt="35 Frames Photography" 
+            <img
+              src={logo}
+              alt="35 Frames Photography"
               className="h-12 lg:h-16 w-auto brightness-0 invert"
             />
           </Link>
@@ -88,7 +91,7 @@ const Header = () => {
             >
               Home
             </button>
-            
+
             <Link
               to="/portfolio"
               className="font-body text-sm tracking-luxury uppercase text-foreground/80 hover:text-primary transition-colors duration-300"
@@ -103,12 +106,12 @@ const Header = () => {
                 className="font-body text-sm tracking-luxury uppercase text-foreground/80 hover:text-primary transition-colors duration-300 flex items-center gap-1"
               >
                 Services
-                <ChevronDown 
-                  size={14} 
-                  className={`transition-transform duration-200 ${isServicesOpen ? "rotate-180" : ""}`} 
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-200 ${isServicesOpen ? "rotate-180" : ""}`}
                 />
               </button>
-              
+
               {isServicesOpen && (
                 <div className="absolute top-full left-0 mt-2 w-56 bg-background border border-border rounded-lg shadow-xl py-2 z-50">
                   {serviceLinks.map((service) => (
@@ -161,9 +164,8 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-500 ${
-            isMobileMenuOpen ? "max-h-[500px] pb-6" : "max-h-0"
-          }`}
+          className={`lg:hidden overflow-hidden transition-all duration-500 ${isMobileMenuOpen ? "max-h-[800px] pb-6" : "max-h-0"
+            }`}
         >
           <nav className="flex flex-col gap-4 pt-4">
             <button
@@ -172,7 +174,7 @@ const Header = () => {
             >
               Home
             </button>
-            
+
             <Link
               to="/portfolio"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -188,13 +190,13 @@ const Header = () => {
                 className="font-body text-base tracking-wide uppercase text-foreground/80 hover:text-primary transition-colors duration-300 flex items-center gap-2"
               >
                 Services
-                <ChevronDown 
-                  size={16} 
-                  className={`transition-transform duration-200 ${isMobileServicesOpen ? "rotate-180" : ""}`} 
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform duration-200 ${isMobileServicesOpen ? "rotate-180" : ""}`}
                 />
               </button>
-              
-              <div className={`overflow-hidden transition-all duration-300 ${isMobileServicesOpen ? "max-h-[200px] mt-2" : "max-h-0"}`}>
+
+              <div className={`overflow-hidden transition-all duration-300 ${isMobileServicesOpen ? "max-h-[400px] mt-2" : "max-h-0"}`}>
                 <div className="pl-4 flex flex-col gap-2 border-l border-border/50">
                   {serviceLinks.map((service) => (
                     <Link
