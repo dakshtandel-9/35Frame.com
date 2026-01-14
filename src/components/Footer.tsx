@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 const Footer = () => {
@@ -11,7 +13,7 @@ const Footer = () => {
           <div>
             <img src={logo} alt="35 Frames Photography" className="h-12 w-auto mb-4" />
             <p className="font-body text-muted-foreground">
-              Premium wedding photography studio crafting timeless visual legacies 
+              Premium wedding photography studio crafting timeless visual legacies
               for couples across India and abroad.
             </p>
           </div>
@@ -54,13 +56,21 @@ const Footer = () => {
         <div className="line-gold mb-8" />
 
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-body text-sm text-muted-foreground">
-            © {currentYear} 35 Frames Photography. All rights reserved.
-          </p>
-          <p className="font-body text-sm text-muted-foreground">
-            Crafted with love for timeless stories
-          </p>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+            <p className="font-body text-sm text-muted-foreground">
+              © {currentYear} 35 Frames Photography. All rights reserved.
+            </p>
+            <p className="font-body text-sm text-muted-foreground">
+              Crafted with love for timeless stories
+            </p>
+          </div>
+
+          <Link to="/admin">
+            <Button variant="outline" size="sm" className="text-xs h-8 px-3 opacity-60 hover:opacity-100 transition-opacity">
+              Admin Portal
+            </Button>
+          </Link>
         </div>
       </div>
     </footer>
@@ -68,3 +78,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
